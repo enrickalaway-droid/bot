@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: instagram-bot
+    env: python
+    plan: free
+    buildCommand: ""
+    startCommand: python main.py
+    envVars:
+      - key: ACCESS_TOKEN
+        value: "EAAB..."  # también puedes gestionarlo desde el panel de Render
