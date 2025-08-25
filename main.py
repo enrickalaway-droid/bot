@@ -3,8 +3,8 @@ import requests
 
 app = Flask(__name__)
 
-VERIFY_TOKEN = "test-token"
-ACCESS_TOKEN = "EAAB..."  # <-- Pega aquí tu token de acceso de página
+VERIFY_TOKEN = "mi_token_secreto_123"
+ACCESS_TOKEN = "EAALQ3PHqEbsBPZAJOksv9a7BpFEeYyhZB7lHa0XCvS6x2RYoSqW5iJQKHLLwQRZBq2gSuS9ZAnfwyKfKa7YydR5ROlc3pmS2b4ZAZCo3l4TV8J6JZCFuRVAHHuSPp0DCoBuIr4NS4kQtUoX6UdwHxKAVkDCNMQcaZAnWOrZCcASLzWb728v9N5205AlZCly77twqrV4rCuSZCD6U9uryktMWzUFzgyHkfhZAyoVbwlySQ4JFXwZDZD"  # <-- Pega aquí tu token de acceso de página
 
 @app.route('/webhook', methods=['GET'])
 def verify():
