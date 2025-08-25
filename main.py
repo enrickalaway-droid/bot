@@ -20,5 +20,9 @@ def webhook():
     # Aquí puedes manejar los mensajes entrantes y responder
     return "ok", 200
 
+@app.route('/')
+def home():
+    return "Servidor activo", 200
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080)
