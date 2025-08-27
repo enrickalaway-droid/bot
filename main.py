@@ -27,6 +27,7 @@ def webhook():
             message_text = event.get("message", {}).get("text")
             if sender_id and message_text:
                 logging.info(f"Mensaje recibido de {sender_id}: {message_text}")
+                send_message(sender_id, "Gracias por tu mensaje")
 
     return "ok", 200
 
