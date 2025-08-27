@@ -1,9 +1,11 @@
 from flask import Flask, request
+import requests
 import logging
 
 app = Flask(__name__)
 
 VERIFY_TOKEN = "mi_token_secreto_123"
+ACCESS_TOKEN = "TU_ACCESS_TOKEN_AQUI"  # Pega aquí tu token válido
 
 logging.basicConfig(level=logging.INFO)
 
@@ -31,7 +33,17 @@ def webhook():
 
     return "ok", 200
 
+def send_message(recipient_id, text):
+    url = f"https://graph.facebook.com/v18.0/me/messages"
+    headers = {"Content-Type": "application/json"}
+    payload = {
+        "recipient": {"id": recipient_id},
+        "message": {"text": text}
+    }
+    params = {"access_token": ACCESS_TOKEN}
+    response = requests.post(url, json=payload, params=params, headers=headers)
+    logging.info(f"Respuesta API Messenger: {response.status_code} {response.text}")
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080)
-
 
