@@ -5,7 +5,8 @@ import logging
 app = Flask(__name__)
 
 VERIFY_TOKEN = "mi_token_secreto_123"
-ACCESS_TOKEN = "EAAPlmE1bNocBPRDc8dodJ1K5A37eyvGZCWVhuAS2GZAN1Cdjpp9fg2NRstIldfyKUsg3ZBe44I1C8sPRlJYMcVF9zZBiOVnuJaDLtF8mDmpFLdsqEYBXCXZBCdzSZBIHzL6a6PLwTP2Fc0SaSWg1e3tjdmcMvoNkfIvj4KWvZB43vqxfpt0Jg2ocAHWsAnDBZC0ZBUjvKfpkYMDcPBqAV0QNMDhKURDIBQ5TuZAUOMeD2MswZDZD"  # Pega aquí tu token válido
+ACCESS_TOKEN = "EAAPlmE1bNocBPRDc8dodJ1K5A37eyvGZCWVhuAS2GZAN1Cdjpp9fg2NRstIldfyKUsg3ZBe44I1C8sPRlJYMcVF9zZBiOVnuJaDLtF8mDmpFLdsqEYBXCXZBCdzSZBIHzL6a6PLwTP2Fc0SaSWg1e3tjdmcMvoNkfIvj4KWvZB43vqxfpt0Jg2ocAHWsAnDBZC0ZBUjvKfpkYMDcPBqAV0QNMDhKURDIBQ5TuZAUOMeD2MswZDZD"
+IG_USER_ID = "17841476681185971"  # Este es tu ID de Instagram Business
 
 logging.basicConfig(level=logging.INFO)
 
@@ -34,11 +35,12 @@ def webhook():
     return "ok", 200
 
 def send_message(recipient_id, text):
-    url = f"https://graph.facebook.com/v18.0/me/messages"
+    url = f"https://graph.facebook.com/v18.0/{IG_USER_ID}/messages"
     headers = {"Content-Type": "application/json"}
     payload = {
         "recipient": {"id": recipient_id},
-        "message": {"text": text}
+        "message": {"text": text},
+        "messaging_type": "RESPONSE"  # obligatorio para algunas apps
     }
     params = {"access_token": ACCESS_TOKEN}
     response = requests.post(url, json=payload, params=params, headers=headers)
