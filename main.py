@@ -5,7 +5,7 @@ import logging
 app = Flask(__name__)
 
 VERIFY_TOKEN = "mi_token_secreto_123"
-ACCESS_TOKEN = "TU_ACCESS_TOKEN_AQUI"  # Pega aquí tu token válido
+ACCESS_TOKEN = "EAAPlmE1bNocBPRDc8dodJ1K5A37eyvGZCWVhuAS2GZAN1Cdjpp9fg2NRstIldfyKUsg3ZBe44I1C8sPRlJYMcVF9zZBiOVnuJaDLtF8mDmpFLdsqEYBXCXZBCdzSZBIHzL6a6PLwTP2Fc0SaSWg1e3tjdmcMvoNkfIvj4KWvZB43vqxfpt0Jg2ocAHWsAnDBZC0ZBUjvKfpkYMDcPBqAV0QNMDhKURDIBQ5TuZAUOMeD2MswZDZD"  # Pega aquí tu token válido
 
 logging.basicConfig(level=logging.INFO)
 
