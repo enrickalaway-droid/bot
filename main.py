@@ -30,24 +30,25 @@ def webhook():
         for event in messaging_events:
             sender_id = event.get("sender", {}).get("id")
             
+            # Obtenemos el username de Instagram
             url = f"https://graph.facebook.com/v19.0/{sender_id}"
             params = {
                 "fields": "username",
                 "access_token": ACCESS_TOKEN
             }
-            
             response = requests.get(url, params=params)
-            data = response.json()
+            user_data = response.json()
             
-            username = data.get("username")
+            username = user_data.get("username", sender_id)  # fallback al ID si no hay username
             message_text = event.get("message", {}).get("text")
+            
             if sender_id and message_text:
                 logging.info(f"Mensaje recibido de {username}: {message_text}")
                 
                 # Convertimos todo a minúsculas y comprobamos si contiene "rutina"
                 if "rutina" in message_text.lower():
                     usuario = username   # <- aquí gestionas tu variable
-                    campaña = message_text         # guardamos la cadena original
+                    campaña = message_text  # guardamos la cadena original
                 
                     # Creamos un DataFrame con las columnas
                     df = pd.DataFrame([[usuario, campaña]], columns=["usuario", "campaña"])
@@ -55,20 +56,18 @@ def webhook():
                     # Guardamos en un Excel (si ya existe, añadimos al final)
                     excel_file = "campanyas.xlsx"
                     try:
-                        # Si el archivo ya existe, lo abrimos y añadimos
                         existing_df = pd.read_excel(excel_file)
                         df = pd.concat([existing_df, df], ignore_index=True)
                     except FileNotFoundError:
-                        # Si no existe, simplemente lo creamos
                         pass
                 
-                    # Exportamos el Excel actualizado
                     df.to_excel(excel_file, index=False)
-                    print(f"✅ Datos guardados en {excel_file}")
+                    logging.info(f"✅ Datos guardados en {excel_file}")
                 else:
-                    print("❌ La cadena no contiene 'rutina'")
-                
-                    return "ok", 200
+                    logging.info("❌ La cadena no contiene 'rutina'")
+
+    # Siempre devolver una respuesta válida
+    return "ok", 200
 
 def send_message(recipient_id, text):
     url = f"https://graph.facebook.com/v18.0/{IG_USER_ID}/messages"
@@ -76,7 +75,7 @@ def send_message(recipient_id, text):
     payload = {
         "recipient": {"id": recipient_id},
         "message": {"text": text},
-        "messaging_type": "RESPONSE"  # obligatorio para algunas apps
+        "messaging_type": "RESPONSE"
     }
     params = {"access_token": ACCESS_TOKEN}
     response = requests.post(url, json=payload, params=params, headers=headers)
@@ -84,4 +83,3 @@ def send_message(recipient_id, text):
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080)
-
