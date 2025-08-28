@@ -45,7 +45,7 @@ def webhook():
                 
                 # Convertimos todo a minúsculas y comprobamos si contiene "rutina"
                 if "rutina" in message_text.lower():
-                    usuario = "usuario123"   # <- aquí gestionas tu variable
+                    usuario = username   # <- aquí gestionas tu variable
                     campaña = message_text         # guardamos la cadena original
                 
                     # Creamos un DataFrame con las columnas
