@@ -55,7 +55,7 @@ def webhook():
                     campaña = message_text
                     df = pd.DataFrame([[usuario, campaña]], columns=["usuario", "campaña"])
 
-                    excel_file = "campanyas.xlsx"
+                    excel_file = os.path.join("/tmp", "campanyas.xlsx")
                     try:
                         existing_df = pd.read_excel(excel_file)
                         df = pd.concat([existing_df, df], ignore_index=True)
