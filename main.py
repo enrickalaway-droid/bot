@@ -1,6 +1,7 @@
 from flask import Flask, request
 import requests
 import logging
+import pandas as pd
 
 app = Flask(__name__)
 
@@ -27,12 +28,46 @@ def webhook():
         messaging_events = entry.get("messaging", [])
         for event in messaging_events:
             sender_id = event.get("sender", {}).get("id")
+            
+            url = f"https://graph.facebook.com/v19.0/{sender_id}"
+            params = {
+                "fields": "username",
+                "access_token": ACCESS_TOKEN
+            }
+            
+            response = requests.get(url, params=params)
+            data = response.json()
+            
+            username = data.get("username")
             message_text = event.get("message", {}).get("text")
             if sender_id and message_text:
-                logging.info(f"Mensaje recibido de {sender_id}: {message_text}")
-                send_message(sender_id, "Gracias por tu mensaje")
-
-    return "ok", 200
+                logging.info(f"Mensaje recibido de {username}: {message_text}")
+                
+                # Convertimos todo a minúsculas y comprobamos si contiene "rutina"
+                if "rutina" in message_text.lower():
+                    usuario = "usuario123"   # <- aquí gestionas tu variable
+                    campaña = message_text         # guardamos la cadena original
+                
+                    # Creamos un DataFrame con las columnas
+                    df = pd.DataFrame([[usuario, campaña]], columns=["usuario", "campaña"])
+                
+                    # Guardamos en un Excel (si ya existe, añadimos al final)
+                    excel_file = "campanyas.xlsx"
+                    try:
+                        # Si el archivo ya existe, lo abrimos y añadimos
+                        existing_df = pd.read_excel(excel_file)
+                        df = pd.concat([existing_df, df], ignore_index=True)
+                    except FileNotFoundError:
+                        # Si no existe, simplemente lo creamos
+                        pass
+                
+                    # Exportamos el Excel actualizado
+                    df.to_excel(excel_file, index=False)
+                    print(f"✅ Datos guardados en {excel_file}")
+                else:
+                    print("❌ La cadena no contiene 'rutina'")
+                
+                    return "ok", 200
 
 def send_message(recipient_id, text):
     url = f"https://graph.facebook.com/v18.0/{IG_USER_ID}/messages"
